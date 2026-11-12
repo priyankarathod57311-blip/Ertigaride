@@ -15,9 +15,11 @@ app.use("/api/admin", adminRoutes);
 
 // Test route
 
-app.get("/api/bookings", (req, res) => {
-    res.send("Booking API is working!");
+// Backend Home Route
+app.get("/", (req, res) => {
+    res.send("Welcome to ErtigaRide Backend!");
 });
+
 // Connect MongoDB and start server
 mongoose.connect(process.env.MONGODB_URI)
     .then(() => {
