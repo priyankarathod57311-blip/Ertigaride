@@ -1,0 +1,55 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ErtigaRide Booking API Test</title>
+</head>
+<body>
+
+    <h2>Test ErtigaRide Booking API</h2>
+
+    <button onclick="testBooking()">Test Booking</button>
+
+    <p id="result"></p>
+
+    <script>
+        async function testBooking() {
+            const bookingData = {
+                customerName: "Test Customer",
+                phone: "9999999999",
+                pickup: "Pune",
+                destination: "Mumbai",
+                tripType: "Outstation",
+                distance: 150,
+                totalFare: 2100
+            };
+
+            try {
+                const response = await fetch(
+                    "http://localhost:5000/api/bookings",
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify(bookingData)
+                    }
+                );
+
+                const data = await response.text();
+
+document.getElementById("result").textContent =
+    "Status: " + response.status + "\n" + data;
+
+                document.getElementById("result").textContent =
+                    JSON.stringify(data, null, 2);
+
+            } catch (error) {
+                document.getElementById("result").textContent =
+                    "Error: " + error.message;
+            }
+        }
+    </script>
+
+</body>
+</html>

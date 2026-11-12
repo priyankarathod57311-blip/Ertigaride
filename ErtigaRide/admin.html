@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard | ErtigaRide</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .admin-hero{padding:48px 0 28px;background:#142d4e;color:#fff}
+    .admin-hero h1{margin:0 0 8px}
+    .admin-wrap{padding:32px 0 70px}
+    .admin-toolbar{display:flex;gap:12px;flex-wrap:wrap;align-items:center;justify-content:space-between;margin-bottom:22px}
+    .admin-toolbar input,.admin-toolbar select{padding:12px 14px;border:1px solid #d8dee8;border-radius:9px;font:inherit;background:#fff}
+    .admin-toolbar input{min-width:220px;flex:1}
+    .admin-actions{display:flex;gap:10px;flex-wrap:wrap}
+    .admin-btn{border:0;border-radius:9px;padding:11px 16px;font-weight:700;cursor:pointer;background:#f4a340;color:#142d4e}
+    .admin-btn.secondary{background:#e9eef5;color:#142d4e}
+    .admin-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
+    .admin-stat{background:#fff;border:1px solid #e6eaf0;border-radius:14px;padding:18px;box-shadow:0 5px 18px #142d4e0a}
+    .admin-stat span{display:block;color:#657186;font-size:13px;margin-bottom:8px}
+    .admin-stat strong{font-size:27px;color:#142d4e}
+    .table-card{background:#fff;border:1px solid #e6eaf0;border-radius:14px;overflow:hidden}
+    .table-scroll{overflow-x:auto}
+    .booking-table{width:100%;border-collapse:collapse;min-width:950px}
+    .booking-table th,.booking-table td{padding:13px 14px;text-align:left;border-bottom:1px solid #edf0f4;font-size:14px;vertical-align:top}
+    .booking-table th{background:#f5f7fa;color:#43516a;font-size:12px;text-transform:uppercase;letter-spacing:.04em}
+    .booking-table select{padding:8px;border:1px solid #d8dee8;border-radius:7px}
+    .small-action{border:0;background:none;color:#145da0;text-decoration:underline;cursor:pointer;padding:5px;font:inherit}
+    .delete-action{color:#c0392b}
+    .empty-state{padding:38px;text-align:center;color:#657186}
+    .notice{background:#fff8e9;border:1px solid #f2d59e;padding:14px 16px;border-radius:10px;color:#72521b;margin-bottom:20px;font-size:14px}
+    .muted{color:#657186;font-size:13px}
+    @media(max-width:800px){.admin-stats{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:480px){.admin-stats{grid-template-columns:1fr 1fr}.admin-stat{padding:13px}.admin-stat strong{font-size:22px}}
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-inner">
+      <a class="logo" href="index.html">Ertiga<span>Ride</span></a>
+      <button class="menu-toggle" aria-label="Open menu">☰</button>
+      <nav class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="booking.html">Bookings</a>
+        <a href="admin.html">Admin Dashboard</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="admin-hero">
+    <div class="container">
+      <p class="eyebrow">ERTIGARIDE MANAGEMENT</p>
+      <h1>Admin Dashboard</h1>
+      <button id="logout-btn" type="button">Logout</button>
+      <p>View customer enquiries, update booking status and contact customers.</p>
+    </div>
+  </section>
+
+  <main class="container admin-wrap">
+    <div class="notice"><strong>Demo version:</strong> This dashboard reads bookings saved in this browser only. It is not a secure, multi-device admin system. For a live business website, connect a backend/database and proper admin login before publishing.</div>
+
+    <div class="admin-stats">
+      <div class="admin-stat"><span>Total enquiries</span><strong id="total-count">0</strong></div>
+      <div class="admin-stat"><span>New enquiries</span><strong id="new-count">0</strong></div>
+      <div class="admin-stat"><span>Confirmed</span><strong id="confirmed-count">0</strong></div>
+      <div class="admin-stat"><span>Completed</span><strong id="completed-count">0</strong></div>
+    </div>
+
+    <div class="admin-toolbar">
+      <input id="booking-search" type="search" placeholder="Search by name, phone or booking ID">
+      <select id="status-filter" aria-label="Filter by status">
+        <option value="All">All statuses</option>
+        <option>Enquiry received</option>
+        <option>Confirmed</option>
+        <option>Completed</option>
+        <option>Cancelled</option>
+      </select>
+      <div class="admin-actions">
+        <button class="admin-btn secondary" id="refresh-btn">Refresh</button>
+        <button class="admin-btn" id="export-btn">Export CSV</button>
+      </div>
+    </div>
+
+    <div class="table-card">
+      <div class="table-scroll">
+        <table class="booking-table">
+          <thead>
+            <tr>
+              <th>Booking</th><th>Customer</th><th>Trip</th><th>Travel</th>
+              <th>Driver / Passengers</th><th>Status</th><th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="booking-rows"></tbody>
+        </table>
+      </div>
+      <div id="empty-state" class="empty-state" hidden>
+        <h3>No bookings found</h3>
+        <p>Customer enquiries submitted from the booking page will appear here when saved in this same browser.</p>
+      </div>
+    </div>
+    <p class="muted" style="margin-top:14px">Tip: Keep a separate backup using the Export CSV button.</p>
+  </main>
+
+  <script src="js/main.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>
