@@ -47,7 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
     rows.innerHTML = `<tr><td colspan="7">Loading bookings...</td></tr>`;
 
     try {
-      const response = await fetch("http://localhost:5000/api/bookings", {
+      const response = await fetch("https://ertigaride-backend.onrender.com/api/bookings", {
     headers: {
         "Authorization": "Bearer " + token
     }
@@ -146,7 +146,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     try {
       const response = await fetch(
-        `http://localhost:5000/api/bookings/${id}/status`,
+        `https://ertigaride-backend.onrender.com/api/bookings/${id}/status`,
         {
           method: "PATCH",
           headers: {
