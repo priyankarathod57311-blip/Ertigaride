@@ -5,9 +5,7 @@ if (!token) {
 }
 
 // Determine API URL based on environment
-const API_BASE = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
-    ? "http://localhost:5000"
-    : "https://ertigaride-backend.onrender.com";
+const API_BASE = "https://ertigaride-backend.onrender.com";
 document.addEventListener("DOMContentLoaded", () => {
   const rows = document.getElementById("booking-rows");
   const empty = document.getElementById("empty-state");
