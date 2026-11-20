@@ -13,6 +13,19 @@ document.addEventListener("DOMContentLoaded", () => {
   const filter = document.getElementById("status-filter");
 
   let bookings = [];
+  let knownBookingIds = new Set();
+  let hasLoadedBookings = false;
+
+function showNewBookingNotification(booking) {
+    if (!("Notification" in window)) return;
+
+    if (Notification.permission === "granted") {
+        new Notification("New ErtigaRide Enquiry!", {
+            body: `${booking.customerName} - ${booking.pickup} to ${booking.destination}`,
+            icon: "../assests/images/logo.png"
+        });
+    }
+}
 
   function escapeHTML(value) {
     return String(value ?? "").replace(/[&<>"']/g, char => ({
@@ -60,9 +73,20 @@ document.addEventListener("DOMContentLoaded", () => {
         throw new Error("Could not load bookings");
       }
 
-      bookings = await response.json();
-      updateStats();
-      render();
+     const latestBookings = await response.json();
+
+if (hasLoadedBookings) {
+    latestBookings
+        .filter(b => !knownBookingIds.has(b._id))
+        .forEach(showNewBookingNotification);
+}
+
+knownBookingIds = new Set(latestBookings.map(b => b._id));
+hasLoadedBookings = true;
+
+bookings = latestBookings;
+updateStats();
+render();
 
     } catch (error) {
       console.error("Loading Error:", error);
@@ -176,19 +200,35 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // WhatsApp message
-  rows.addEventListener("click", event => {
+  // WhatsApp message to customer
+rows.addEventListener("click", event => {
     if (!event.target.matches(".whatsapp-action")) return;
 
     const id = event.target.dataset.id;
     const booking = bookings.find(b => b._id === id);
 
     if (booking) {
-      const message =
-        `Hello ${booking.customerName}, regarding your ErtigaRide enquiry ${booking.bookingId}: ${booking.status || "Enquiry received"}.`;
+        const message =
+            `Hello ${booking.customerName}, regarding your ErtigaRide enquiry ${booking.bookingId}: ${booking.status || "Enquiry received"}.`;
 
-      openWhatsApp(message);
+        let customerPhone = String(booking.phone || "").replace(/\D/g, "");
+
+        // Add India country code if number has 10 digits
+        if (customerPhone.length === 10) {
+            customerPhone = "91" + customerPhone;
+        }
+
+        if (customerPhone.length < 12) {
+            alert("Customer phone number is invalid.");
+            return;
+        }
+
+        const whatsappURL =
+            `https://wa.me/${customerPhone}?text=${encodeURIComponent(message)}`;
+
+        window.open(whatsappURL, "_blank");
     }
-  });
+});
 
   // Export bookings to CSV
   function exportCSV() {
@@ -236,6 +276,7 @@ document.addEventListener("DOMContentLoaded", () => {
     .addEventListener("click", exportCSV);
 
   loadBookings();
+  setInterval(loadBookings, 15000);
 });
 const logoutBtn = document.getElementById("logout-btn");
 
