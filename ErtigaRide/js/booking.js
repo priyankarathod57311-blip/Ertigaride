@@ -9,14 +9,44 @@ document.addEventListener("DOMContentLoaded", () => {
     if (dateInput) dateInput.min = today;
 
     // Determine API URL based on environment
-    const API_BASE = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
-        ? "http://localhost:5000"
-        : "https://ertigaride-backend.onrender.com";
+    const API_BASE = "https://ertigaride-backend.onrender.com";
+
+    console.log("API Base URL:", API_BASE);
+    console.log("Hostname:", window.location.hostname);
+
+    // Direct WhatsApp button - bypasses API
+    const whatsappDirectBtn = document.getElementById("whatsapp-direct");
+    if (whatsappDirectBtn) {
+        whatsappDirectBtn.addEventListener("click", () => {
+            const data = Object.fromEntries(new FormData(form).entries());
+            const bookingId = "ER" + Date.now().toString().slice(-8);
+            
+            const message =
+`Hello ErtigaRide! I would like to enquire about a booking.
+
+Booking ID: ${bookingId}
+Name: ${data.name}
+Phone: ${data.phone}
+Trip type: ${data.tripType}
+Pickup: ${data.pickup}
+Destination: ${data.destination}
+Travel date: ${data.travelDate}
+Pickup time: ${data.pickupTime}
+Passengers: ${data.passengers}
+Driver option: ${data.driverOption}
+Return trip: ${data.returnTrip}
+Notes: ${data.notes || "None"}
+
+Please confirm availability and final fare.`;
+            
+            openWhatsApp(message);
+        });
+    }
 
     form.addEventListener("submit", async (event) => {
         event.preventDefault();
 
-        if (!form.reportValidity()) return;
+        
 
         const data = Object.fromEntries(
             new FormData(form).entries()
@@ -51,6 +81,9 @@ Please confirm availability and final fare.`;
         result.textContent = "Saving your booking...";
 
         try {
+            console.log("Submitting booking to:", `${API_BASE}/api/bookings`);
+            console.log("Booking data:", data);
+
             const response = await fetch(
                 `${API_BASE}/api/bookings`,
                 {
@@ -77,7 +110,9 @@ Please confirm availability and final fare.`;
                 }
             );
 
+            console.log("Response status:", response.status);
             const responseData = await response.json();
+            console.log("Response data:", responseData);
 
             if (!response.ok) {
                 throw new Error(responseData.message || "Booking failed");
@@ -85,6 +120,8 @@ Please confirm availability and final fare.`;
 
             result.textContent =
                 "Booking saved successfully! Reference: " + data.bookingId;
+            result.style.color = "#146b49";
+            result.style.background = "#eef8f3";
 
             whatsappButton.onclick = () => openWhatsApp(message);
             whatsappButton.style.display = "inline-flex";
@@ -95,10 +132,32 @@ Please confirm availability and final fare.`;
         } catch (error) {
             console.error("Booking Error:", error);
 
-            result.textContent =
-                "Booking could not be saved. Please try again. " + error.message;
+            // Fallback: Save to localStorage if API fails
+            try {
+                const existingBookings = JSON.parse(localStorage.getItem("ertigaRideBookings") || "[]");
+                existingBookings.push(data);
+                localStorage.setItem("ertigaRideBookings", JSON.stringify(existingBookings));
+                
+                result.textContent =
+                    "Booking saved locally! Reference: " + data.bookingId + " (Server unavailable - data saved in browser)";
+                result.style.color = "#78501d";
+                result.style.background = "#fff8e9";
 
-            whatsappButton.style.display = "none";
+                whatsappButton.onclick = () => openWhatsApp(message);
+                whatsappButton.style.display = "inline-flex";
+
+                form.reset();
+                dateInput.min = today;
+            } catch (localError) {
+                result.textContent =
+                    "Booking could not be saved. Please try again or contact us directly via WhatsApp.";
+                result.style.color = "#c0392b";
+                result.style.background = "#fee";
+
+                whatsappButton.onclick = () => openWhatsApp(message);
+                whatsappButton.style.display = "inline-flex";
+                whatsappButton.textContent = "Send via WhatsApp";
+            }
         }
     });
 });

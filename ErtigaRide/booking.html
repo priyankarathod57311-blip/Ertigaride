@@ -55,10 +55,10 @@
 </div>
 </div>
 </section>
-<section class="section" id="booking-form"><div class="container content-grid">
+<section class="section" id="booking-section"><div class="container content-grid">
 <div class="panel"><h2>Booking enquiry form</h2><form id="booking-form" class="form-grid two">
 <div class="field"><label>Full name *</label><input name="name" required placeholder="Your name"></div>
-<div class="field"><label>Mobile number *</label><input name="phone" required type="tel" pattern="[0-9+ -]{10,15}" placeholder="Your phone number"></div>
+<div class="field"><label>Mobile number *</label><input name="phone" required type="tel" pattern="[0-9]{10}" placeholder="Your phone number"></div>
 <div class="field"><label>Trip type *</label><select name="tripType" id="booking-trip" required><option value="">Select trip</option><option>Local</option><option>Outstation</option><option>Airport transfer</option><option>Family trip</option><option>Special occasion</option></select></div>
 <div class="field"><label>Driver option *</label><select name="driverOption" required><option value="">Select option</option><option>With driver</option><option>Self-drive (subject to eligibility and availability)</option></select></div>
 <div class="field"><label>Pickup location *</label><input name="pickup" required placeholder="Pickup address / area"></div>
@@ -70,6 +70,7 @@
 <div class="field full"><label>Additional requirements</label><textarea name="notes" placeholder="Return date, luggage, stops or other details"></textarea></div>
 <div class="full"><div class="notice">This form sends a booking enquiry, not an instant confirmed reservation. Final availability, fare, driver option and terms must be confirmed by the owner.</div></div>
 <div class="full"><button class="btn btn-primary" type="submit">Submit booking enquiry →</button></div>
+<div class="full" style="margin-top:15px"><button class="btn btn-dark" type="button" id="whatsapp-direct">Send directly via WhatsApp 📱</button></div>
 </form><div class="result" id="booking-result"></div><button class="btn btn-dark" id="send-whatsapp" style="display:none;margin-top:15px" type="button">Send enquiry on WhatsApp</button></div>
 <aside><div class="price-box"><h3>Your travel, your choice</h3><div class="amount">7 Seats</div><p>Maruti Suzuki Ertiga • Pune</p><p>Choose driver-assisted or self-drive enquiry. Self-drive availability depends on vehicle permissions, insurance and eligibility.</p><a class="btn btn-primary" href="pricing.html">View fare estimate</a></div><div class="panel"><h3>Booking help</h3><p>Have questions before booking?</p><p><strong>Location:</strong> Pune, Maharashtra</p><p><strong>Phone:</strong> 8767398660</p><p><strong>Hours:</strong> 24 hr</p></div></aside>
 </div></section></main>
