@@ -8,6 +8,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (dateInput) dateInput.min = today;
 
+    // Determine API URL based on environment
+    const API_BASE = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
+        ? "http://localhost:5000"
+        : "https://ertigaride-backend.onrender.com";
+
     form.addEventListener("submit", async (event) => {
         event.preventDefault();
 
@@ -47,7 +52,7 @@ Please confirm availability and final fare.`;
 
         try {
             const response = await fetch(
-                "https://ertigaride-backend.onrender.com/api/bookings",
+                `${API_BASE}/api/bookings`,
                 {
                     method: "POST",
                     headers: {

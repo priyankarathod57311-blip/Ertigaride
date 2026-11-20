@@ -4,6 +4,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const form = document.getElementById("admin-login-form");
     const message = document.getElementById("login-message");
 
+    // Determine API URL based on environment
+    const API_BASE = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
+        ? "http://localhost:5000"
+        : "https://ertigaride-backend.onrender.com";
+
     form.addEventListener("submit", async (event) => {
         event.preventDefault();
 
@@ -14,7 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         try {
             const response = await fetch(
-                "https://ertigaride-backend.onrender.com/api/admin/login",
+                `${API_BASE}/api/admin/login`,
                 {
                     method: "POST",
                     headers: {

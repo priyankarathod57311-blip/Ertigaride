@@ -8,7 +8,10 @@ const app = express();
 const bookingRoutes = require("./bookingRoutes");
 const adminRoutes = require("./adminRoutes");
 
-app.use(cors());
+app.use(cors({
+  origin: ["https://ertigaride.netlify.app", "http://localhost:8080"],
+  credentials: true
+}));
 app.use(express.json());
 app.use("/api/bookings", bookingRoutes);
 app.use("/api/admin", adminRoutes);

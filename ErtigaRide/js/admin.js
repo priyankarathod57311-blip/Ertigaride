@@ -3,6 +3,11 @@ const token = sessionStorage.getItem("ertigaRideAdminToken");
 if (!token) {
     window.location.href = "admin-login.html";
 }
+
+// Determine API URL based on environment
+const API_BASE = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
+    ? "http://localhost:5000"
+    : "https://ertigaride-backend.onrender.com";
 document.addEventListener("DOMContentLoaded", () => {
   const rows = document.getElementById("booking-rows");
   const empty = document.getElementById("empty-state");
@@ -47,7 +52,7 @@ document.addEventListener("DOMContentLoaded", () => {
     rows.innerHTML = `<tr><td colspan="7">Loading bookings...</td></tr>`;
 
     try {
-      const response = await fetch("https://ertigaride-backend.onrender.com/api/bookings", {
+      const response = await fetch(`${API_BASE}/api/bookings`, {
     headers: {
         "Authorization": "Bearer " + token
     }
@@ -146,7 +151,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     try {
       const response = await fetch(
-        `https://ertigaride-backend.onrender.com/api/bookings/${id}/status`,
+        `${API_BASE}/api/bookings/${id}/status`,
         {
           method: "PATCH",
           headers: {
